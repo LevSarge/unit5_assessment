@@ -18,20 +18,24 @@ module.exports = {
       .catch(err => console.log(err))
   },
   createCity: (req, res) => {
-    let {} = req.body
-    
-    sequelize.query(`insert into countries
-    values(name, rating, countryId)`)
+    let {name, rating, countryId} = req.body
+
+    sequelize.query(`insert into cities (name, rating, country_id)
+    values('${name}', ${rating}, ${countryId})`)
     .then(dbRes => res.status(200).send(dbRes[0]))
     .catch(err => console.log(err))
   },
   getCities: (req, res) => {
-    sequelize.query(``)
+    sequelize.query(`select c.city_id, c.name as city, c.rating, cc.country_id, cc.name as country from cities c
+    join countries cc on c.country_id = cc.country_id`)
     .then(dbRes => res.status(200).send(dbRes[0]))
     .catch(err => console.log(err))
   },
   deleteCity: (req, res) => {
-    sequelize.query(``)
+    let {id} = req.params
+
+    sequelize.query(`DELETE FROM cities 
+    WHERE city_id = ${id};`)
     .then(dbRes => res.status(200).send(dbRes[0]))
     .catch(err => console.log(err))
   },
